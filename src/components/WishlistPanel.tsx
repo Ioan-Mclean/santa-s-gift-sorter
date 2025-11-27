@@ -28,11 +28,11 @@ export function WishlistPanel() {
 
   if (wishlist.length === 0) {
     return (
-      <Card className="p-8 text-center bg-card/80 backdrop-blur-sm border-2 border-muted">
-        <Heart className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-        <p className="text-lg text-muted-foreground">Your wishlist is empty</p>
+      <Card className="p-8 text-center bg-card/80 backdrop-blur-sm border-2 border-muted animate-fade-in">
+        <Heart className="h-16 w-16 mx-auto mb-4 text-muted-foreground animate-pulse" />
+        <p className="text-lg font-semibold text-foreground">Your wishlist is empty! 🎄</p>
         <p className="text-sm text-muted-foreground mt-2">
-          Click the heart icon on gifts to add them here!
+          Tap the heart on gifts to save your favourites ❤️
         </p>
       </Card>
     );
@@ -55,7 +55,7 @@ export function WishlistPanel() {
         {wishlist.map((item) => (
           <Card
             key={item.id}
-            className="p-4 bg-card/90 backdrop-blur-sm border border-accent/20"
+            className="p-4 bg-card/90 backdrop-blur-sm border border-accent/20 animate-fade-in hover:shadow-lg transition-all duration-200"
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
@@ -72,7 +72,7 @@ export function WishlistPanel() {
                 variant="ghost"
                 size="icon"
                 onClick={() => handleRemove(item.id)}
-                className="text-destructive hover:text-destructive"
+                className="text-destructive hover:text-destructive hover:bg-destructive/10 transition-all duration-200 hover:scale-110"
               >
                 <X className="h-4 w-4" />
               </Button>

@@ -1,7 +1,19 @@
 import { RecipientProfile, Gift, GiftCategory } from "@/types/gift";
+import { v4 as uuidv4 } from "uuid";
 
 const BOX_COLORS = ["#c41e3a", "#165b33", "#d4af37", "#f8f8ff", "#c41e3a"];
 const RIBBON_COLORS = ["#d4af37", "#f8f8ff", "#4169e1", "#c41e3a", "#c0c0c0"];
+
+// Ensure box and ribbon colors are different
+function assignVisualTheme(): { boxColor: string; ribbonColor: string } {
+  const boxColor = BOX_COLORS[Math.floor(Math.random() * BOX_COLORS.length)];
+  
+  // Filter out ribbons that match the box color
+  const availableRibbons = RIBBON_COLORS.filter(ribbon => ribbon !== boxColor);
+  const ribbonColor = availableRibbons[Math.floor(Math.random() * availableRibbons.length)];
+  
+  return { boxColor, ribbonColor };
+}
 
 interface GiftTemplate {
   name: string;
@@ -287,20 +299,24 @@ export function generateGifts(profile: RecipientProfile): Gift[] {
   const numGifts = Math.floor(Math.random() * 3) + 5; // 5-7
   const selectedGifts = scoredTemplates.slice(0, numGifts);
 
-  return selectedGifts.map((item, index) => ({
-    id: `gift-${Date.now()}-${index}`,
-    name: item.template.name,
-    category: item.template.category,
-    priceRange: formatPriceRange(item.template.basePrice, profile.budgetMax),
-    description: `Perfect for a ${profile.ageRange} ${profile.relationship} who loves ${profile.interests.slice(0, 2).join(" and ")}. This ${item.template.category.toLowerCase()} gift combines ${profile.giftStyle} appeal with Christmas magic.`,
-    christmasMessage: generateChristmasMessage(
-      item.template.name,
-      profile.relationship,
-      profile.giftStyle
-    ),
-    boxColor: BOX_COLORS[Math.floor(Math.random() * BOX_COLORS.length)],
-    ribbonColor: RIBBON_COLORS[Math.floor(Math.random() * RIBBON_COLORS.length)],
-  }));
+  return selectedGifts.map((item) => {
+    const { boxColor, ribbonColor } = assignVisualTheme();
+    
+    return {
+      id: uuidv4(),
+      name: item.template.name,
+      category: item.template.category,
+      priceRange: formatPriceRange(item.template.basePrice, profile.budgetMax),
+      description: `Perfect for a ${profile.ageRange} ${profile.relationship} who loves ${profile.interests.slice(0, 2).join(" and ")}. This ${item.template.category.toLowerCase()} gift combines ${profile.giftStyle} appeal with Christmas magic.`,
+      christmasMessage: generateChristmasMessage(
+        item.template.name,
+        profile.relationship,
+        profile.giftStyle
+      ),
+      boxColor,
+      ribbonColor,
+    };
+  });
 }
 
 export function generateSurpriseGifts(): Gift[] {
