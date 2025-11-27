@@ -26,9 +26,15 @@ export function GiftCard({ gift, onAddToWishlist, isInWishlist }: GiftCardProps)
             variant={isInWishlist ? "default" : "outline"}
             size="icon"
             onClick={() => onAddToWishlist(gift)}
-            className={isInWishlist ? "bg-primary" : ""}
+            className={`transition-all duration-200 ${
+              isInWishlist ? "bg-primary hover:bg-primary/90 scale-105" : "hover:scale-110"
+            }`}
           >
-            <Heart className={`h-5 w-5 ${isInWishlist ? "fill-current" : ""}`} />
+            <Heart 
+              className={`h-5 w-5 transition-all duration-200 ${
+                isInWishlist ? "fill-current animate-scale-in" : ""
+              }`} 
+            />
           </Button>
         </div>
 

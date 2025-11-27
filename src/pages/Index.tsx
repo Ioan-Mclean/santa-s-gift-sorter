@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { RecipientProfile, Gift } from "@/types/gift";
 import { generateGifts, generateSurpriseGifts } from "@/utils/giftGenerator";
-import { addToWishlist, isInWishlist, getWishlist } from "@/utils/wishlist";
+import { addToWishlist, removeFromWishlist, isInWishlist, getWishlist } from "@/utils/wishlist";
 import { Header } from "@/components/Header";
 import { Snowfall } from "@/components/Snowfall";
 import { GiftForm } from "@/components/GiftForm";
@@ -29,9 +29,15 @@ const Index = () => {
   };
 
   const handleAddToWishlist = (gift: Gift) => {
-    addToWishlist(gift);
-    setWishlistVersion((v) => v + 1);
-    toast.success("Added to wishlist! ❤️");
+    if (isInWishlist(gift.id)) {
+      removeFromWishlist(gift.id);
+      setWishlistVersion((v) => v + 1);
+      toast.success("Removed from wishlist");
+    } else {
+      addToWishlist(gift);
+      setWishlistVersion((v) => v + 1);
+      toast.success("Added to wishlist! ❤️");
+    }
   };
 
   const handleRegenerate = () => {
